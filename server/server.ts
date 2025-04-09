@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 // import cookieParser from "cookie-parser";
 dotenv.config();
 import connectdb from "./config/database";
+import { notFound, errorHandler } from "./middleware/error.middleware";
 
 import cors from "cors";
 
@@ -20,6 +21,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
