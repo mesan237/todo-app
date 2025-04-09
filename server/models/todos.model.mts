@@ -1,6 +1,8 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
-interface ITask {
+interface ITodo {
+  user: Types.ObjectId;
+  category: Types.ObjectId;
   title: string;
   status: "not started" | "pending" | "completed";
   priority: "low" | "medium" | "high";
@@ -9,8 +11,18 @@ interface ITask {
   updatedAt: Date;
 }
 
-const taskSchema = new Schema<ITask>(
+const todoSchema = new Schema<ITodo>(
   {
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -33,6 +45,6 @@ const taskSchema = new Schema<ITask>(
   { timestamps: true }
 );
 
-const Task = model<ITask>("Task", taskSchema);
+const Todo = model<ITodo>("Todo", todoSchema);
 
-export default Task;
+export default Todo;
