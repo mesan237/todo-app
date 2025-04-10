@@ -4,6 +4,7 @@ interface ITodo {
   user: Types.ObjectId;
   category: Types.ObjectId;
   title: string;
+  description: string;
   status: "not started" | "pending" | "completed";
   priority: "low" | "medium" | "high";
   due_date: Date;
@@ -26,6 +27,10 @@ const todoSchema = new Schema<ITodo>(
     title: {
       type: String,
       required: true,
+    },
+    description: {
+      type: String,
+      required: false,
     },
     status: {
       type: String,
