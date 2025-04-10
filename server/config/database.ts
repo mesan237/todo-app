@@ -4,6 +4,7 @@ dotenv.config();
 
 const uri = process.env.ATLAS_URI || "";
 const connectdb = async () => {
+  // console.log("uri", uri);
   try {
     const con = await mongoose.connect(uri);
     console.log("connected ...");

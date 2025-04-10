@@ -2,8 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 // import cookieParser from "cookie-parser";
 dotenv.config();
-import connectdb from "./config/database";
-import { notFound, errorHandler } from "./middleware/error.middleware";
+import connectdb from "./config/database.js";
+import { notFound, errorHandler } from "./middleware/error.middleware.js";
 
 import cors from "cors";
 

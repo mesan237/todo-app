@@ -29,7 +29,7 @@
 
 ## <a name="introduction">🤖 Introduction</a>
 
-Built with React.js for the user interface, Node js for the Backend, and styled with TailwindCSS,Todo App is a website project designed to help beginners get started with learning MEAN stack. 
+Built with React.js for the user interface, Node js for the Backend, and styled with TailwindCSS,Todo App is a website project designed to help beginners get started with learning MEAN stack.
 
 ## <a name="tech-stack"> Tech Stack</a>
 
@@ -38,7 +38,6 @@ Built with React.js for the user interface, Node js for the Backend, and styled 
 - Tailwind CSS
 
 ## <a name="features"> Features</a>
-
 
 👉 **Responsiveness**: Fully responsive design that works seamlessly across devices.
 
@@ -74,13 +73,12 @@ npm install
 
 **Set Up Environment Variables**
 
-Create a new file named `.env.frontend` in the root of your project and add the following content:
+Create a new file named `.env.example` in the root of your project and add the following content:
 
 ```env
 
+
 ```
-
-
 
 **Running the Project**
 
@@ -89,4 +87,3 @@ npm run start
 ```
 
 Open [http://localhost:4200](http://localhost:4200) in your browser to view the project.
-
