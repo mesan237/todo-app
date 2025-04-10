@@ -1,6 +1,6 @@
 import { Types, model, Schema } from "mongoose";
 
-interface ICategory {
+interface ICategory extends Document {
   _id: Types.ObjectId;
   name: string;
   user: Types.ObjectId;
