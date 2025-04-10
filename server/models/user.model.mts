@@ -1,7 +1,7 @@
 import { Model, Schema, Types, model } from "mongoose";
 import { compare, genSalt, hashSync } from "bcrypt-ts";
 
-interface IUser {
+interface IUser extends Document {
   _id: Types.ObjectId;
   name: string;
   email: string;
@@ -52,4 +52,5 @@ userSchema.pre("save", async function (next) {
   this.password = await hashSync(this.password, salt);
 });
 
+export type UserDocument = IUser;
 export default User;

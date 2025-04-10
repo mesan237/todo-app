@@ -5,6 +5,7 @@ dotenv.config();
 import connectdb from "./config/database.js";
 import { notFound, errorHandler } from "./middleware/error.middleware.js";
 import userRoutes from "./routes/user.routes.js";
+import categoriesRoutes from "./routes/category.routes.js";
 
 import cors from "cors";
 
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+app.use("/api/categories", categoriesRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
