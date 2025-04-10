@@ -6,25 +6,20 @@ interface CustomJwtPayload extends JwtPayload {
   userId: string;
 }
 
-interface CustomRequest extends Request {
-  user: UserDocument;
-}
-
 // protect routes
 
 const protect = async (req: Request, res: Response, next: NextFunction) => {
   let token;
 
-  const customReq = req as CustomRequest;
   // read the jwt from the cooie
-  token = customReq.cookies.jwt;
+  token = req.cookies.jwt;
+
   if (token) {
     try {
       const decoded = jwt.verify(
         token,
         process.env.JWT_SECRET!
       ) as CustomJwtPayload;
-      console.log("decoded", decoded);
 
       const user: UserDocument | null = await User.findById(
         decoded.userId
@@ -35,7 +30,7 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
         return;
       }
       req.user = user;
-
+      console.log("req_user", req.user);
       next();
     } catch (error) {
       console.log(error);
@@ -48,4 +43,4 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { protect, CustomRequest };
+export { protect };

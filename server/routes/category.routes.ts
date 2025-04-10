@@ -9,12 +9,12 @@ import {
 import { protect } from "../middleware/auth.middleware.js";
 const router = express.Router();
 
-router.route("/").post(addCategories, protect).get(getCategories, protect);
+router.route("/").post(protect, addCategories).get(protect, getCategories);
 
 router.route("/:categoryId").get(getCategoryById, protect);
 router
   .route("/:categoryId")
-  .put(updateCategory, protect)
-  .delete(deleteCategory, protect);
+  .put(protect, updateCategory)
+  .delete(protect, deleteCategory);
 
 export default router;

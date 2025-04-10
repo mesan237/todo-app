@@ -8,6 +8,7 @@ import userRoutes from "./routes/user.routes.js";
 import categoriesRoutes from "./routes/category.routes.js";
 
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 connectdb();
 
@@ -18,7 +19,7 @@ app.use(cors({ origin: "http://localhost:4200", credentials: true }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(cookieParser());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("API is running...");

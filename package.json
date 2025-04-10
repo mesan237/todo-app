@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon --watch server --exec ts-node server/server.ts",
+    "server": "nodemon --watch server --exec ts-node --files server/server.ts",
     "data:import": "ts-node server/seeder.ts",
     "data:destroy": "ts-node server/seeder.ts -d"
   },
@@ -17,6 +17,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.9",
     "bcrypt-ts": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",

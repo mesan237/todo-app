@@ -1,12 +1,10 @@
 import { Request, Response } from "express";
 import Category from "../models/categories.model.mjs";
-import { CustomRequest } from "../middleware/auth.middleware.js";
 
 const addCategories = async (req: Request, res: Response) => {
-  const customReq = req as CustomRequest;
   try {
-    const { name } = customReq.body;
-    const user = customReq.user;
+    const { name } = req.body;
+    const user = req.user;
 
     const category = await Category.create({ name, user });
 
@@ -17,9 +15,9 @@ const addCategories = async (req: Request, res: Response) => {
 };
 
 const getCategories = async (req: Request, res: Response) => {
-  const customReq = req as CustomRequest;
   try {
-    const categories = await Category.find({ user: customReq.user._id });
+    // console.log(req);
+    const categories = await Category.find({ user: req.user?._id });
     res.status(200).json(categories);
   } catch (error) {
     console.log(error);
@@ -29,7 +27,7 @@ const getCategories = async (req: Request, res: Response) => {
 
 const getCategoryById = async (req: Request, res: Response) => {
   try {
-    const category = await Category.findById(req.params.id);
+    const category = await Category.findById(req.params.categoryId);
     if (category) {
       res.status(200).json(category);
     } else {
@@ -42,7 +40,7 @@ const getCategoryById = async (req: Request, res: Response) => {
 
 const updateCategory = async (req: Request, res: Response) => {
   try {
-    const category = await Category.findById(req.params.id);
+    const category = await Category.findById(req.params.categoryId);
     if (category) {
       category.name = req.body.name || category.name;
       const updatedCategory = await category.save();
@@ -57,7 +55,7 @@ const updateCategory = async (req: Request, res: Response) => {
 
 const deleteCategory = async (req: Request, res: Response) => {
   try {
-    const category = await Category.findById(req.params.id);
+    const category = await Category.findById(req.params.categoryId);
     if (category) {
       // await category.remove();
       res.status(200).json({ message: "Category removed" });
