@@ -1,0 +1,66 @@
+<!-- todo-list.component.html -->
+<div class="todo-container">
+  <div class="todo-header">
+    <h2>My Todos</h2>
+    <div class="category-filters">
+      <button
+        (click)="filterByCategory(null)"
+        [class.active]="!selectedCategory"
+      >
+        All
+      </button>
+      <button
+        *ngFor="let category of categories"
+        (click)="filterByCategory(category.id)"
+        [class.active]="selectedCategory === category.id"
+      >
+        >
+        {{ category.name }}
+      </button>
+    </div>
+  </div>
+
+  <div class="todo-form">
+    <input
+      type="text"
+      [(ngModel)]="newTodoTitle"
+      placeholder="Add a new todo..."
+      (keyup.enter)="addTodo()"
+    />
+    <textarea
+      [(ngModel)]="newTodoDescription"
+      placeholder="Description (optional)"
+    ></textarea>
+    <select [(ngModel)]="newTodoCategory">
+      <option value="">No category</option>
+      <option *ngFor="let category of categories" [value]="category.id">
+        {{ category.name }}
+      </option>
+    </select>
+    <button (click)="addTodo()">Add Todo</button>
+  </div>
+
+  <div class="todo-items">
+    <div
+      *ngFor="let todo of todos"
+      class="todo-item"
+      [class.completed]="todo.completed"
+    >
+      <div class="todo-checkbox" (click)="toggleComplete(todo)">
+        <span *ngIf="todo.completed">✓</span>
+      </div>
+      <div class="todo-content">
+        <h3>{{ todo.title }}</h3>
+        <p *ngIf="todo.description">{{ todo.description }}</p>
+        <div *ngIf="todo.category" class="todo-category">
+          <!-- <span
+            [style.backgroundColor]="getCategoryColor(todo.category)"
+          ></span> -->
+          <!-- {{ getCategoryName(todo.category) }} -->
+          {{ todo.category }}
+        </div>
+      </div>
+      <button class="todo-delete" (click)="deleteTodo(todo.id)">×</button>
+    </div>
+  </div>
+</div>

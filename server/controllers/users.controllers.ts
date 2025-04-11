@@ -50,9 +50,6 @@ const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-// @desc fetch a single product
-// @route GET /api/users/profile
-// @access Private
 const getUserProfile = async (req: Request, res: Response) => {
   const user = await User.findById(req.params.user);
 
@@ -67,9 +64,7 @@ const getUserProfile = async (req: Request, res: Response) => {
     throw new Error("User not found ! ");
   }
 };
-// @desc fetch a single product
-// @route GET /api/products/:productId
-// @access Public
+
 const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await User.find();
@@ -78,9 +73,7 @@ const getUsers = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error", error: error });
   }
 };
-// @desc log
-// @route GET /api/registe/login
-// @access Public
+
 const updateUser = async (req: Request, res: Response) => {
   const user = await User.findById(req.params.id);
   console.log(user);
@@ -104,9 +97,7 @@ const updateUser = async (req: Request, res: Response) => {
     throw new Error("User not found ! ");
   }
 };
-// @desc log
-// @route GET /api/registe/login
-// @access Public
+
 const getUserById = async (req: Request, res: Response) => {
   const id = req.params.id ? req.params.id : req.params.user;
 
@@ -124,9 +115,7 @@ const getUserById = async (req: Request, res: Response) => {
     throw new Error("User not found ! ");
   }
 };
-// @desc logout&& clear cookie
-// @route GET /api/users/logout
-// @access Private
+
 const logoutUser = async (req: Request, res: Response) => {
   res.cookie("jwt", "", {
     httpOnly: true,
@@ -137,9 +126,7 @@ const logoutUser = async (req: Request, res: Response) => {
     message: "Successfully logged out",
   });
 };
-// @desc fetch a single product
-// @route GET /api/products/:productId
-// @access Public
+
 const deleteUser = async (req: Request, res: Response) => {
   const user = await User.findById(req.params.id);
   if (user) {

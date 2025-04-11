@@ -22,7 +22,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
       (authStatus) => {
         if (authStatus) {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/todos']);
         }
       },
       (error) => {

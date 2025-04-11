@@ -45,8 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.authService.login(form.value.email, form.value.password).subscribe({
       next: () => {
-        // Navigation is now handled in the component instead of service
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/todos']);
       },
       error: (err) => {
         this.isLoading = false;

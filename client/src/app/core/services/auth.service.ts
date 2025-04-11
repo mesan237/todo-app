@@ -16,7 +16,6 @@ import { environment } from '../../../environment/environment';
 interface User {
   name: string;
   email: string;
-  password: string;
 }
 
 @Injectable({
@@ -24,20 +23,14 @@ interface User {
 })
 export class AuthService {
   private isAuthenticated = false;
-  private token!: string | null;
-  private tokenTimer: any;
   private currentUser!: User | null;
 
   private authStatusListener = new Subject<boolean>();
   private userListener = new Subject<User>();
-
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
   private apiUrl = `${environment.baseUrl}/users`;
 
   constructor(private http: HttpClient, private router: Router) {}
-
-  getToken() {
-    return this.token;
-  }
 
   getIsAuth() {
     return this.isAuthenticated;
@@ -60,39 +53,32 @@ export class AuthService {
     email: string,
     password: string
   ): Observable<{ message: string }> {
-    const userData: User = { name, email, password };
+    const userData = { name, email, password };
 
     return this.http
       .post<{
         token: string;
         expiresIn: number;
         user: User;
-      }>('http://localhost:8000/api/users/register', userData, {
+      }>(`${this.apiUrl}/register`, userData, {
         withCredentials: true,
         headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       })
       .pipe(
         tap((response) => {
-          const token = response.token;
-          this.token = token;
+          this.isAuthenticated = true;
+          this.currentUser = response.user;
+          this.authStatusListener.next(true);
 
-          if (token) {
-            const expiresInDuration = response.expiresIn;
-            this.setAuthTimer(expiresInDuration);
-            this.isAuthenticated = true;
-            this.currentUser = response.user;
-            this.authStatusListener.next(true);
-
-            const expirationDate = new Date(
-              new Date().getTime() + expiresInDuration * 1000
-            );
-            this.saveAuthData(token, expirationDate, response.user);
-          }
+          this.saveAuthData(response.user);
+          this.currentUserSubject.next(response.user);
         }),
         map(() => ({ message: 'Signup successful' })),
         catchError((error) => {
           this.authStatusListener.next(false);
-          return throwError(() => error);
+          const errorMessage =
+            error.error?.message || 'An unknown error occurred during signup.';
+          return throwError(() => new Error(errorMessage));
         })
       );
   }
@@ -103,11 +89,8 @@ export class AuthService {
   ): Observable<{ token: string; user: User }> {
     return this.http
       .post<{ token: string; user: User }>(
-        `http://localhost:8000/api/users/login/`,
-        {
-          email,
-          password,
-        },
+        `${this.apiUrl}/login`,
+        { email, password },
         {
           withCredentials: true,
           headers: new HttpHeaders({
@@ -117,10 +100,17 @@ export class AuthService {
       )
       .pipe(
         tap((response) => {
-          // Handle token storage and other side effects here
-          this.token = response.token;
+          this.isAuthenticated = true;
           this.currentUser = response.user;
           this.authStatusListener.next(true);
+
+          this.saveAuthData(response.user);
+          this.currentUserSubject.next(response.user);
+        }),
+        catchError((error) => {
+          const errorMessage =
+            error.error?.message || 'An unknown error occurred during login.';
+          return throwError(() => new Error(errorMessage));
         })
       );
   }
@@ -131,68 +121,43 @@ export class AuthService {
       return;
     }
 
-    const now = new Date();
-    const expiresIn = authInformation.expirationDate.getTime() - now.getTime();
-
-    if (expiresIn > 0) {
-      this.token = authInformation.token;
-      this.isAuthenticated = true;
-
-      this.currentUser = {
-        name: authInformation.name! as string,
-        email: authInformation.email! as string,
-        password: '',
-      };
-      this.setAuthTimer(expiresIn / 1000);
-      this.authStatusListener.next(true);
-    }
+    this.isAuthenticated = true;
+    this.currentUser = {
+      name: authInformation.name,
+      email: authInformation.email,
+    };
+    this.authStatusListener.next(true);
+    this.currentUserSubject.next(this.currentUser);
   }
 
   logout() {
-    this.token = null;
     this.isAuthenticated = false;
     this.authStatusListener.next(false);
     this.currentUser = null;
-    clearTimeout(this.tokenTimer);
     this.clearAuthData();
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']).catch((err) => {
+      console.error('Navigation to /login failed:', err);
+    });
   }
 
-  private setAuthTimer(duration: number) {
-    this.tokenTimer = setTimeout(() => {
-      this.logout();
-    }, duration * 1000);
-  }
-
-  private saveAuthData(token: string, expirationDate: Date, user: User) {
-    localStorage.setItem('token', token);
-    localStorage.setItem('expiration', expirationDate.toISOString());
+  private saveAuthData(user: User) {
     localStorage.setItem('name', user.name);
     localStorage.setItem('email', user.email);
   }
 
   private clearAuthData() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('expiration');
     localStorage.removeItem('name');
     localStorage.removeItem('email');
   }
 
   private getAuthData() {
-    const token = localStorage.getItem('token');
-    const expirationDate = localStorage.getItem('expiration');
     const name = localStorage.getItem('name');
     const email = localStorage.getItem('email');
 
-    if (!token || !expirationDate) {
-      return;
+    if (!name || !email) {
+      return null;
     }
 
-    return {
-      token: token,
-      expirationDate: new Date(expirationDate),
-      name: name,
-      email: email,
-    };
+    return { name, email };
   }
 }
