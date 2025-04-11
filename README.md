@@ -10,7 +10,7 @@
     <img src="https://img.shields.io/badge/Express.js-000000?logo=express&logoColor=fff&style=flat" alt="Express.js" /> 
     <img src="https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular.js" />
     <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white" alt="Node.s" />
-    <img src="https://img.shields.io/badge/-Tailwind_CSS-black?style=for-the-badge&logoColor=white&logo=tailwindcss&color=06B6D4" alt="tailwindcss" />
+    <img src="https://img.shields.io/badge/Sass-CC6699?style=flat-square&logo=Sass&logoColor=white" alt="sass" />
   </div>
 
   <h3 align="center">A ToDo Application</h3>
@@ -68,24 +68,49 @@ cd todo-app
 
 Install the project dependencies using npm:
 
+For the server
 ```bash
+npm install
+```
+
+For the Client
+```bash
+cd client
+
 npm install
 ```
 
 **Set Up Environment Variables**
 
-Create a new file named `.env.frontend` in the root of your project and add the following content:
+Duplicate the  `.env.example` in the root of your project, rename it to .env and replace each value in it:
 
 ```env
 
+ATLAS_URI=mongodb+srv://<username>:<password>@<your-cluster>.mongodb.net/meanStackExample?retryWrites=true&w=majority
+PORT=5000
+NODE_ENV=development
+JWT_SECRET=your_jwt_secret_key
 ```
 
 
-
-**Running the Project**
+**Running the Server**
 
 ```bash
 npm run start
+```
+
+seed the database:
+
+run these commands
+```bash
+npm install
+```
+
+
+**Running the client**
+
+```bash
+npm run "data:import"
 ```
 
 Open [http://localhost:4200](http://localhost:4200) in your browser to view the project.
