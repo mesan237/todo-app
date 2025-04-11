@@ -2,7 +2,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  Observable,
+  Subject,
+  tap,
+  throwError,
+} from 'rxjs';
 import { environment } from '../../../environment/environment';
 
 interface User {
@@ -47,22 +55,24 @@ export class AuthService {
     return this.userListener.asObservable();
   }
 
-  signUp(name: string, email: string, password: string) {
+  signUp(
+    name: string,
+    email: string,
+    password: string
+  ): Observable<{ message: string }> {
     const userData: User = { name, email, password };
 
-    this.http
-      .post<{ token: string; expiresIn: number; user: User }>(
-        `http://localhost:8000/api/users/register`,
-        userData,
-        {
-          withCredentials: true,
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-          }),
-        }
-      )
-      .subscribe(
-        (response) => {
+    return this.http
+      .post<{
+        token: string;
+        expiresIn: number;
+        user: User;
+      }>('http://localhost:8000/api/users/register', userData, {
+        withCredentials: true,
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      })
+      .pipe(
+        tap((response) => {
           const token = response.token;
           this.token = token;
 
@@ -77,13 +87,13 @@ export class AuthService {
               new Date().getTime() + expiresInDuration * 1000
             );
             this.saveAuthData(token, expirationDate, response.user);
-
-            this.router.navigate(['/']);
           }
-        },
-        (error) => {
+        }),
+        map(() => ({ message: 'Signup successful' })),
+        catchError((error) => {
           this.authStatusListener.next(false);
-        }
+          return throwError(() => error);
+        })
       );
   }
 
