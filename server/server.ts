@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -18,7 +18,13 @@ connectdb();
 const port = process.env.PORT || 5000;
 const app = express();
 
-app.use(cors({ origin: "http://localhost:4200", credentials: true }));
+app.use(
+  cors({
+    origin: "http://localhost:4200",
+    credentials: true,
+    methods: "POST,GET,PUT,OPTIONS,DELETE",
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

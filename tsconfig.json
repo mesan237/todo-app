@@ -1,9 +1,15 @@
 {
+  "ts-node": {
+    "esm": true,
+    "transpileOnly": true,
+    "files": true,
+    "experimentalResolver": true
+  },
   "include": ["server/**/*", "server/**/*.d.ts"],
   "compilerOptions": {
     "target": "es2016",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -11,8 +17,5 @@
     "outDir": "./dist",
 
     "typeRoots": ["./node_modules/@types", "./server/types"]
-  },
-  "ts-node": {
-    "esm": true
   }
 }
