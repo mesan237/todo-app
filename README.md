@@ -41,6 +41,9 @@ Built with React.js for the user interface, Node js for the Backend, and styled 
 
 
 👉 **Responsiveness**: Fully responsive design that works seamlessly across devices.
+👉 **Task Creation**:  Users can easily add new tasks to their list.​.
+👉 **User Authentication**: Secure login to protect user data and personalize the experience.
+👉 **Categories**:  Organize tasks by grouping them into categories .
 
 and many more, including code architecture and reusability
 
@@ -82,7 +85,8 @@ npm install
 
 **Set Up Environment Variables**
 
-Duplicate the  `.env.example` in the root of your project, rename it to .env and replace each value in it:
+In the root directory of your project, duplicate the `.env.example` file and rename the copy to `.env`.
+Open the `.env` file and replace the placeholder values with your actual configuration details
 
 ```env
 
@@ -96,21 +100,21 @@ JWT_SECRET=your_jwt_secret_key
 **Running the Server**
 
 ```bash
-npm run start
+npm run dev
 ```
 
 seed the database:
 
 run these commands
 ```bash
-npm install
+npm run 'data:import'
 ```
 
 
 **Running the client**
 
 ```bash
-npm run "data:import"
+ng serve"
 ```
 
 Open [http://localhost:4200](http://localhost:4200) in your browser to view the project.
